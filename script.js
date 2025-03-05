@@ -1,20 +1,26 @@
 function sendMessage() {
-    let userInput = document.getElementById("user-input").value;
-    if (!userInput) return;
+    console.log("sendMessage() function triggered"); // Check if this function is called
 
-    let chatBox = document.getElementById("chat-box");
-    chatBox.innerHTML += `<p><b>You:</b> ${userInput}</p>`;
+    const input = document.getElementById("user-input").value;
+    if (input.trim() === "") {
+        console.log("Empty input, skipping response");
+        return;
+    }
 
-    fetch("/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userInput })
-    })
-    .then(response => response.json())
-    .then(data => {
-        chatBox.innerHTML += `<p><b>Bot:</b> ${data.response}</p>`;
-        document.getElementById("user-input").value = "";
-        chatBox.scrollTop = chatBox.scrollHeight;
-    });
+    // Display user's message
+    const chatBox = document.getElementById("chat-box");
+    const messageElem = document.createElement("div");
+    messageElem.textContent = "You: " + input;
+    chatBox.appendChild(messageElem);
+
+    // Process the message and get a response
+    const response = getResponse(input);
+    console.log("Response received:", response); // Debugging step
+
+    const responseElem = document.createElement("div");
+    responseElem.textContent = "Bot: " + response;
+    chatBox.appendChild(responseElem);
+
+    // Clear the input field
+    document.getElementById("user-input").value = "";
 }
-
