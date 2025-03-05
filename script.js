@@ -1,3 +1,5 @@
+
+// Function to handle sending messages
 function sendMessage() {
     console.log("sendMessage() function triggered");
 
@@ -13,7 +15,7 @@ function sendMessage() {
     userMessage.textContent = "You: " + input;
     chatBox.appendChild(userMessage);
 
-    // Get chatbot response (without fetching from a server)
+    // Get chatbot response from plant data
     const response = getResponse(input);
     console.log("Response generated:", response);
 
@@ -26,15 +28,19 @@ function sendMessage() {
     document.getElementById("user-input").value = "";
 }
 
-// Simple response function (no API needed)
+// Function to retrieve a response from plantData.js
 function getResponse(input) {
     console.log("getResponse() function triggered with input:", input);
 
-    if (input.toLowerCase().includes("hello")) {
-        return "Hello! How can I help you with your plants?";
-    } else if (input.toLowerCase().includes("water")) {
-        return "Most plants need watering once a week, but it depends on the species!";
-    } else {
-        return "I'm not sure, but I'm learning! Try asking about plant care.";
+    const lowerInput = input.toLowerCase();
+
+    // Search for the most relevant plant care information
+    for (let i = 0; i < plantData.length; i++) {
+        const entry = plantData[i];
+        if (lowerInput.includes(entry.Question.toLowerCase())) {
+            return entry.Answer;
+        }
     }
+
+    return "I'm sorry, I don't have information on that plant yet. Try asking about a different plant!";
 }
